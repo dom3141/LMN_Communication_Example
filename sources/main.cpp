@@ -91,8 +91,8 @@ int main(int argc, char *argv[]) {
 	int destAddr, sourceAddr;
 	unsigned short* actviveSubscriber = new unsigned short[128];
 	unsigned short anzahlAktiverTln;
-	unsigned char meterId[10]; // = { 0x0A, 0x01, 0x45, 0x4D, 0x48, 0x00, 0x00, 0x4A, 0xF1, 0xFD };
-	unsigned char obis[9]; // = { 0x01, 0x00, 0x01, 0x08, 0x00, 0xFF, 0x80, 0x02, 0x00 };
+	unsigned char meterId[10];
+	unsigned char obis[9];
 	unsigned char masterKey[16];
 	int emhBug;
 	unsigned char clientCert[MAX_CERT_SIZE];
