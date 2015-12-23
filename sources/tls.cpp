@@ -38,7 +38,7 @@ void setGlobalMeterID(unsigned char* meterId) {
 	return;
 }
 
-int counter = 0, idx = 0, overall = 0, newData = 0, pufferLength = 0, idx2 = 0;
+int counter = 0, idx = 0, overall = 0, newData = 0, pufferLength = 0, idx2 = 0, idx2_old = 0;
 
 unsigned char puffer[2048];
 unsigned char certBuffer[2048];
@@ -95,15 +95,22 @@ void InitHandShakeInfo(HandShakeInfo* info) {
 }
 
 int CBIOUserRecv(WOLFSSL *ssl, char *buf, int sz, void *ctx) {
+	int CBIOUserRecv_ret_val;
 	if (newData == 1) {
-		*buf = (char) puffer[idx2];
-		idx2++;
-		if (idx2 == pufferLength) {
-			idx2 = 0;
-			newData = 0;
+		while ((idx2 < pufferLength) && (idx2 < (sz+idx2_old))) {
+			*(buf+(idx2-idx2_old)) = (char) puffer[idx2];
+			idx2++;
 		}
-		return 1;
-	} else
+		CBIOUserRecv_ret_val = (idx2-idx2_old);
+		idx2_old = idx2;
+		if (idx2 == pufferLength) {
+			newData = 0;
+			idx2 = 0;
+			idx2_old = 0;
+		}
+		return (CBIOUserRecv_ret_val);
+	}
+	else
 		lmnSendData(globalMeterId, TLS_SML_COSEM, puffer, 0, cb);
 	return 0;
 }
