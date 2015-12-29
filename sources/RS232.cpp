@@ -270,7 +270,7 @@ void RS232DataRequest(unsigned char destAddr, unsigned char sourceAddr,
 			fsync(fileno(logfile));
 		}
 	}
-	callback(destAddr, sourceAddr, protSel, payload, receivedBytes);
+	callback(sourceAddr, destAddr, protSel, payload, receivedBytes);
 
 	return;
 }
