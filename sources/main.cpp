@@ -91,8 +91,8 @@ int main(int argc, char *argv[]) {
 	int destAddr, sourceAddr;
 	unsigned short* actviveSubscriber = new unsigned short[128];
 	unsigned short anzahlAktiverTln;
-	unsigned char meterId[10];
-	unsigned char obis[9];
+	unsigned char meterId[10]; // = { 0x0A, 0x01, 0x45, 0x4D, 0x48, 0x00, 0x00, 0x4A, 0xF1, 0xFD };
+	unsigned char obis[9]; // = { 0x01, 0x00, 0x01, 0x08, 0x00, 0xFF, 0x80, 0x02, 0x00 };
 	unsigned char masterKey[16];
 	int emhBug;
 	unsigned char clientCert[MAX_CERT_SIZE];
@@ -648,17 +648,13 @@ void readMeterValue_cb(unsigned char destAddr, unsigned char sourceAddr,
 
 		getMeterId(sourceAddr, fromMeterId);
 		int eMeterValue = 0;
-		//do this three times with dummy messages as a workaround to prevent wrong values
+		//do this ten times with dummy messages as a workaround to prevent wrong values
 		//being returned from sml layer before parsing a real message
-		eMeterValue = getValueFromSmlMessage(pay2, sizeof(pay2), &errorCode);
-		smlGenerateGetProcParameterRequest(meterId, message, sizeof(message),
-				obis, sizeof(obis));
-		eMeterValue = getValueFromSmlMessage(pay2, sizeof(pay2), &errorCode);
-		smlGenerateGetProcParameterRequest(meterId, message, sizeof(message),
-				obis, sizeof(obis));
-		eMeterValue = getValueFromSmlMessage(pay2, sizeof(pay2), &errorCode);
-		smlGenerateGetProcParameterRequest(meterId, message, sizeof(message),
-				obis, sizeof(obis));
+		for (int smlLoop = 0; smlLoop < 9; smlLoop++) {
+			eMeterValue = getValueFromSmlMessage(pay2, sizeof(pay2), &errorCode);
+			smlGenerateGetProcParameterRequest(meterId, message, sizeof(message),
+					obis, sizeof(obis));
+		}
 		eMeterValue = getValueFromSmlMessage(payload, payloadLength,
 				&errorCode);
 		if (errorCode == 0)
