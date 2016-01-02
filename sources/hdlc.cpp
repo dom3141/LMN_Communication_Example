@@ -107,6 +107,11 @@ void hdlcSendData(unsigned char destAddr, unsigned char sourceAddr,
 			switch (protSel) {
 
 			case TLS_SML_COSEM:
+				if (global_sim != 0) {
+					setChannelStatus(static_cast<unsigned short>(destAddr), opened);
+					setConnectionType(static_cast<unsigned short>(destAddr),
+							TLS_SML_COSEM);
+				}
 				if (getChannelStatus(static_cast<unsigned short>(destAddr))
 						== opened) {
 					if (getConnectionType(static_cast<unsigned short>(destAddr))
@@ -301,6 +306,11 @@ void hdlcSendData(unsigned char destAddr, unsigned char sourceAddr,
 				sendenAktiv = 0;
 				break;
 			case SML_COSEM:
+				if (global_sim != 0) {
+									setChannelStatus(static_cast<unsigned short>(destAddr), opened);
+									setConnectionType(static_cast<unsigned short>(destAddr),
+											SML_COSEM);
+				}
 				if (getChannelStatus(static_cast<unsigned short>(destAddr))
 						== opened) {
 					if (getConnectionType(static_cast<unsigned short>(destAddr))
