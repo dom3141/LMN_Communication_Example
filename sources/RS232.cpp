@@ -233,8 +233,6 @@ void RS232DataRequest(unsigned char destAddr, unsigned char sourceAddr,
 			(int) (time(NULL) & 0x0EFFFF), milliSeconds);
 	strcat(debugString, tempString);
 
-	gettimeofday(&curTime, NULL);
-	milliSeconds = curTime.tv_usec / 100;
 	if (receivedBytes <= 0) {
 		sprintf(tempString, "******* NO REPLY *******");
 		strcat(debugString, tempString);
@@ -270,7 +268,7 @@ void RS232DataRequest(unsigned char destAddr, unsigned char sourceAddr,
 			fsync(fileno(logfile));
 		}
 	}
-	callback(sourceAddr, destAddr, protSel, payload, receivedBytes);
+	callback(destAddr, sourceAddr, protSel, payload, receivedBytes);
 
 	return;
 }
