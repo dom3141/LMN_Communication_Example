@@ -182,7 +182,7 @@ double getValueFromSmlMessage(unsigned char *completeSmlFile, int SmlFileLength,
 
 int getValueFromSmlMessage(unsigned char *completeSmlFile, int SmlFileLength,
 		int* errorCode) {
-	sml_file *recvFile = sml_file_init();
+	sml_file *recvFile;
 	recvFile = sml_file_parse(completeSmlFile + 8, SmlFileLength - 16);
 	*errorCode = 0;
 	/*
@@ -313,7 +313,5 @@ int smlGenerateFile(sml_file *file, unsigned char *data, int dataLength) {
 	 return wr;
 	 }
 	 */
-
-	return buf->cursor - 1;
+	return buf->cursor;
 }
-
