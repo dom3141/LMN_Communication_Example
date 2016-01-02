@@ -267,12 +267,12 @@ void fakeRS232DataRequest(unsigned char destAddr, unsigned char sourceAddr,
 	usleep(750 * 1000);
 
 	gettimeofday(&curTime, NULL);
-	milliSeconds = curTime.tv_usec / 1000;
+	milliSeconds = curTime.tv_usec / 100;
+	sprintf(tempString, "\n\nRECEIVE DATA: [TIME]=%06d.%04d ",
+			(int) (time(NULL) & 0x0EFFFF), milliSeconds);
+	strcat(debugString, tempString);
 
 	if (payloadLength <= 0) {
-		sprintf(tempString, "\n\nRECEIVE DATA: [TIME]=%06d.%03d ",
-				(int) (time(NULL) & 0x0EFFFF), milliSeconds);
-		strcat(debugString, tempString);
 		sprintf(tempString, "******* NO REPLY *******");
 		strcat(debugString, tempString);
 		sprintf(tempString,
